@@ -2,12 +2,12 @@ require.config(
 {
     paths: 
     {
-        "pat": "pat",
+        "pet": "pet",
         "pobject": "pobject",
         "httprequest": "httprequest"
     }
 });
-require(['pat','pobject','httprequest'],function(pat,pobject,httprequest)
+require(['pet','pobject','httprequest'],function(pet,pobject,httprequest)
 {
     let c=document.getElementById('pet');
     let ctx=c.getContext('2d');
@@ -57,14 +57,14 @@ require(['pat','pobject','httprequest'],function(pat,pobject,httprequest)
             let img=new Image();
             img.src=v.img;
             npobject.setimg(img);
-            pat.addpobjects(npobject);
+            pet.addpobjects(npobject);
         });
         run();
     }
     function run()
     {
-        pat.blink();
-        pat.jump();
+        pet.blink();
+        pet.jump();
         draw();
         window.setTimeout(function(){run();},10);
     }
@@ -74,7 +74,7 @@ require(['pat','pobject','httprequest'],function(pat,pobject,httprequest)
         ctx.fillRect(0,0,c.width,c.height);
         ctx.fillStyle="#000000";
         ctx.save();
-        ctx.translate(450,pat.getgroundy()+210);
+        ctx.translate(450,pet.getgroundy()+210);
         ctx.scale(1,0.3);
         ctx.beginPath();
         ctx.arc(0,0,50,0,2*Math.PI);
@@ -83,9 +83,9 @@ require(['pat','pobject','httprequest'],function(pat,pobject,httprequest)
         ctx.closePath();
         ctx.restore();
         ctx.save();
-        ctx.translate(pat.getpx(),pat.getpy()); 
+        ctx.translate(pet.getpx(),pet.getpy()); 
         ctx.scale(0.4,0.4);
-        pat.getpobjects().forEach(function(v)
+        pet.getpobjects().forEach(function(v)
         {
             ctx.save();
             ctx.translate(v.getx()-v.getimg().width*0.4,v.gety()-v.getimg().height*0.4);
