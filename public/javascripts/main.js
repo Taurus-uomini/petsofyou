@@ -19,7 +19,8 @@ require(['pat','pobject','httprequest'],function(pat,pobject,httprequest)
         let datajson={'perception':{'inputText':{'text':text}},'userInfo':{'apiKey':'d06760be821d42d3b6e7492cd0c73856','userId':'231365'}};
         httprequest.dorequest
         (
-            'http://openapi.tuling123.com/openapi/api/v2',
+            // 'http://openapi.tuling123.com/openapi/api/v2',
+            '/gettalk',
             JSON.stringify(datajson),
             'post',
             function(status,data)
@@ -31,6 +32,9 @@ require(['pat','pobject','httprequest'],function(pat,pobject,httprequest)
                 else if(status==0)
                 {
                     console.log(data);
+                    document.getElementById('respone').innerHTML=data.text.results[0].values.text;
+                    document.getElementById('responeaudio').src=data.audiourl;
+                    document.getElementById('responeaudio').play();
                 }
             },
             2000,
@@ -41,7 +45,7 @@ require(['pat','pobject','httprequest'],function(pat,pobject,httprequest)
     init();
     function init()
     {
-        let arr=[{'x':70,'y':120,'scalex':1,'scaley':1,'priority':1,'img':'img/pet-body.png'},{'x':70,'y':0,'scalex':1,'scaley':1,'priority':2,'img':'img/pet-head.png'},{'x':80,'y':20,'scalex':1,'scaley':1,'priority':3,'img':'img/pet-mouth.png'},{'x':40,'y':0,'scalex':1,'scaley':1,'priority':4,'img':'img/pet-eye.png'},{'x':120,'y':0,'scalex':1,'scaley':1,'priority':5,'img':'img/pet-eye.png'}];
+        let arr=[{'x':70,'y':120,'scalex':1,'scaley':1,'priority':1,'img':'images/pet-body.png'},{'x':70,'y':0,'scalex':1,'scaley':1,'priority':2,'img':'images/pet-head.png'},{'x':80,'y':20,'scalex':1,'scaley':1,'priority':3,'img':'images/pet-mouth.png'},{'x':40,'y':0,'scalex':1,'scaley':1,'priority':4,'img':'images/pet-eye.png'},{'x':120,'y':0,'scalex':1,'scaley':1,'priority':5,'img':'images/pet-eye.png'}];
         arr.forEach(function(v)
         {
             let npobject=pobject.createpobject();
