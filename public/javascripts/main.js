@@ -4,19 +4,20 @@ require.config(
     {
         "pet": "pet",
         "pobject": "pobject",
+        'petfeatures': "petfeatures",
         "httprequest": "httprequest"
     }
 });
-require(['pet','pobject','httprequest'],function(pet,pobject,httprequest)
+require(['pet','pobject','petfeatures','httprequest'],function(pet,pobject,petfeatures,httprequest)
 {
     let c=document.getElementById('pet');
     let ctx=c.getContext('2d');
     let talkwords=document.getElementById('talkwords');
     let talksend=document.getElementById('talksend');
+    let responeaudio=document.getElementById('responeaudio');
     talksend.onclick = function()
     {
-        let text=talkwords.value;
-        let datajson={'perception':{'inputText':{'text':text}},'userInfo':{'apiKey':'d06760be821d42d3b6e7492cd0c73856','userId':'231365'}};
+        let datajson={"talkwords":talkwords.value,"character":petfeatures.getcharacter(),"voice":petfeatures.getvoice(),"speed":petfeatures.getspeed(),"tone":petfeatures.gettone()};
         httprequest.dorequest
         (
             // 'http://openapi.tuling123.com/openapi/api/v2',
@@ -33,8 +34,8 @@ require(['pet','pobject','httprequest'],function(pet,pobject,httprequest)
                 {
                     console.log(data);
                     document.getElementById('respone').innerHTML=data.text.results[0].values.text;
-                    document.getElementById('responeaudio').src=data.audiourl;
-                    document.getElementById('responeaudio').play();
+                    responeaudio.src=data.audiourl;
+                    responeaudio.play();
                 }
             },
             2000,
@@ -45,7 +46,8 @@ require(['pet','pobject','httprequest'],function(pet,pobject,httprequest)
     init();
     function init()
     {
-        let arr=[{'x':70,'y':120,'scalex':1,'scaley':1,'priority':1,'img':'images/pet-body.png'},{'x':70,'y':0,'scalex':1,'scaley':1,'priority':2,'img':'images/pet-head.png'},{'x':80,'y':20,'scalex':1,'scaley':1,'priority':3,'img':'images/pet-mouth.png'},{'x':40,'y':0,'scalex':1,'scaley':1,'priority':4,'img':'images/pet-eye.png'},{'x':120,'y':0,'scalex':1,'scaley':1,'priority':5,'img':'images/pet-eye.png'}];
+        petfeatures.init('00000354');
+        let arr=[{'x':70,'y':120,'scalex':1,'scaley':1,'priority':1,'img':'images/pet-body'+petfeatures.getbodytype()+'.png'},{'x':70,'y':0,'scalex':1,'scaley':1,'priority':2,'img':'images/pet-head'+petfeatures.getheadtype()+'.png'},{'x':80,'y':20,'scalex':1,'scaley':1,'priority':3,'img':'images/pet-mouth'+petfeatures.getmouthtype()+'.png'},{'x':40,'y':0,'scalex':1,'scaley':1,'priority':4,'img':'images/pet-eye'+petfeatures.geteyetype()+'.png'},{'x':120,'y':0,'scalex':1,'scaley':1,'priority':5,'img':'images/pet-eye'+petfeatures.geteyetype()+'.png'}];
         arr.forEach(function(v)
         {
             let npobject=pobject.createpobject();
@@ -63,6 +65,7 @@ require(['pet','pobject','httprequest'],function(pet,pobject,httprequest)
     }
     function run()
     {
+        pet.speak(!!responeaudio.duration && responeaudio.currentTime!=responeaudio.duration);
         pet.blink();
         pet.jump();
         draw();
