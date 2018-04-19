@@ -26,6 +26,10 @@ define(function()
     {
         return py;
     }
+    let cleanpobjects=function()
+    {
+        pobjects=Array();
+    }
     let addpobjects=function(object)
     {
         pobjects.push(object);
@@ -129,6 +133,7 @@ define(function()
         getpx:getpx,
         getpy:getpy,
         addpobjects:addpobjects,
+        cleanpobjects:cleanpobjects,
         getjumpn:getjumpn,
         getgroundy:getgroundy,
         blink:blink,

@@ -5,16 +5,73 @@ require.config(
         "pet": "pet",
         "pobject": "pobject",
         'petfeatures': "petfeatures",
-        "httprequest": "httprequest"
+        "httprequest": "httprequest",
+        "checklogin": "checklogin"
     }
 });
-require(['pet','pobject','petfeatures','httprequest'],function(pet,pobject,petfeatures,httprequest)
+require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,pobject,petfeatures,httprequest,checklogin)
 {
+    if(!checklogin.checklogin())
+    {
+        location='/login';
+    }
     let c=document.getElementById('pet');
     let ctx=c.getContext('2d');
     let talkwords=document.getElementById('talkwords');
     let talksend=document.getElementById('talksend');
     let responeaudio=document.getElementById('responeaudio');
+    let givepet_btn=document.getElementById('givepet_btn');
+    let features='00000354';
+    let stime;
+    givepet_btn.onclick = function()
+    {
+        let access_token = localStorage.getItem('access_token');
+        let paddress = localStorage.getItem('paddress');
+        let datajson={"access_token":access_token,"paddress":paddress};
+        httprequest.dorequest
+        (
+            '/givepet',
+            JSON.stringify(datajson),
+            'post',
+            function(status,data)
+            {
+                if(status==-1)
+                {
+                    alert('网络超时，请重试！');
+                }
+                else if(status==0)
+                {
+                    console.log(data);
+                    if(data.code != 0)
+                    {
+                        alert(data.message);
+                        if(data.code == 1000)
+                        {
+                            location='/login';
+                        }
+                        
+                    }
+                    else
+                    {
+                        if(data.result)
+                        {
+                            alert('you have already get a pet');
+                        }
+                        else
+                        {
+                            features = data.pet.features;
+                            clearTimeout(stime);
+                            pet.cleanpobjects();
+                            init();
+                        }
+                    }
+                }
+            },
+            2000,
+            'application/json',
+            'json'
+        );
+    }
     talksend.onclick = function()
     {
         let datajson={"talkwords":talkwords.value,"character":petfeatures.getcharacter(),"voice":petfeatures.getvoice(),"speed":petfeatures.getspeed(),"tone":petfeatures.gettone()};
@@ -46,7 +103,7 @@ require(['pet','pobject','petfeatures','httprequest'],function(pet,pobject,petfe
     init();
     function init()
     {
-        petfeatures.init('00000354');
+        petfeatures.init(features);
         let arr=[{'x':70,'y':120,'scalex':1,'scaley':1,'priority':1,'img':'images/pet-body'+petfeatures.getbodytype()+'.png'},{'x':70,'y':0,'scalex':1,'scaley':1,'priority':2,'img':'images/pet-head'+petfeatures.getheadtype()+'.png'},{'x':80,'y':20,'scalex':1,'scaley':1,'priority':3,'img':'images/pet-mouth'+petfeatures.getmouthtype()+'.png'},{'x':40,'y':0,'scalex':1,'scaley':1,'priority':4,'img':'images/pet-eye'+petfeatures.geteyetype()+'.png'},{'x':120,'y':0,'scalex':1,'scaley':1,'priority':5,'img':'images/pet-eye'+petfeatures.geteyetype()+'.png'}];
         arr.forEach(function(v)
         {
@@ -69,7 +126,7 @@ require(['pet','pobject','petfeatures','httprequest'],function(pet,pobject,petfe
         pet.blink();
         pet.jump();
         draw();
-        window.setTimeout(function(){run();},10);
+        stime=window.setTimeout(function(){run();},10);
     }
     function draw()
     {
