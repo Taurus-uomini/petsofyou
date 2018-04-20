@@ -251,7 +251,7 @@ router.post('/', function(req, res, next) {
                             }
                             else
                             {
-                                res.send({"code":0,"message":"success","pet":result});
+                                res.send({"code":0,"message":"success","petid":body2.result.petid,"pet":result});
                             }
                         });
                     }

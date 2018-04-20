@@ -1,0 +1,19 @@
+doctype html
+html
+head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible" content="ie=edge")
+    title pet
+    script(src="/javascripts/require.js" data-main="/javascripts/petitem")
+body
+    div(style="width:1000px;margin:0 auto;")
+        input(type="hidden" id="petid" value="#{id}")
+        canvas(id="pet" width="1000" height="500")
+    div.textinput
+        input(type="text" id="talkwords")
+        button(id="talksend") 发送
+        p#respone
+        audio#responeaudio
+
+    
