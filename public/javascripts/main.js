@@ -21,7 +21,7 @@ require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,
     let talksend=document.getElementById('talksend');
     let responeaudio=document.getElementById('responeaudio');
     let givepet_btn=document.getElementById('givepet_btn');
-    let features='00000354';
+    let features='11110354';
     let stime;
     givepet_btn.onclick = function()
     {

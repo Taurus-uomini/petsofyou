@@ -24,6 +24,76 @@ require(['pet', 'pobject', 'petfeatures', 'httprequest', 'checklogin'], function
     let ctx=c.getContext('2d');
     httprequest.dorequest
     (
+        '/user/checksignin',
+        JSON.stringify(datajson),
+        'post',
+        function (status, data) 
+        {
+            if (status == -1) 
+            {
+                alert('网络超时，请重试！');
+            }
+            else if (status == 0) 
+            {
+                if(data.result.hassignin)
+                {
+                    var signin_btn = document.getElementById('signin_btn');
+                    signin_btn.innerHTML = '你今天已签到';
+                    signin_btn.onclick = '';
+                }
+                else
+                {
+                    var signin_btn = document.getElementById('signin_btn');
+                    signin_btn.onclick = function()
+                    {
+                        httprequest.dorequest
+                        (
+                            '/user/signin',
+                            JSON.stringify(datajson),
+                            'post',
+                            function (status, data) 
+                            {
+                                if (status == -1) 
+                                {
+                                    alert('网络超时，请重试！');
+                                }
+                                else if (status == 0) 
+                                {
+                                    var modal_div = document.getElementsByClassName('modal_div');
+                                    var signin_btn = document.getElementById('signin_btn');
+                                    if(data.code != 0)
+                                    {
+                                        alert(data.message);
+                                    }
+                                    else
+                                    {
+                                        document.getElementById('givepcoin_p').innerHTML = '恭喜你获得'+data.result.gave_pcoin+'pcoin';
+                                        var div_id = signin_btn.getAttribute('data_div_id');
+                                        modal_div.do('show',div_id);
+                                        var okclose_btn = document.getElementById('okclose_btn');
+                                        okclose_btn.onclick = function()
+                                        {
+                                            modal_div.do('hide',div_id);
+                                        }
+                                    }
+                                    signin_btn.innerHTML = '你今天已签到';
+                                    signin_btn.onclick = '';
+                                }
+                            },
+                            2000,
+                            'application/json',
+                            'json'
+                        );
+                    }
+                }
+            }
+        },
+        2000,
+        'application/json',
+        'json'
+    );
+    httprequest.dorequest
+    (
         '/user/getpetscount',
         JSON.stringify(datajson),
         'post',

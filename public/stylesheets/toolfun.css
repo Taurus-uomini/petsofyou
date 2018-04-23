@@ -1,0 +1,21 @@
+.modal_div
+{
+    display: none;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 100000;
+    width: 100%;
+    background-color: #00000047;
+}
+.modal_item_div
+{
+    width: 35%;
+    margin: 50px auto;
+    text-align: center;
+    background-color: white;
+    height: 15%;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 6px;
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
+}

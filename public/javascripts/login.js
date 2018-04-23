@@ -43,7 +43,7 @@ require.config(
                             localStorage.setItem('nickname',data.result.nickname);
                             localStorage.setItem('paddress',data.result.paddress);
                             localStorage.setItem('access_token',data.result.access_token);
-                            location='/';
+                            location='/user';
                         }
                         else
                         {

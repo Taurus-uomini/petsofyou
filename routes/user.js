@@ -11,6 +11,44 @@ router.get('/petitem/:id?', function (req, res, next) {
     res.render('petitem', {'id':req.params.id});
 });
 
+router.post('/checksignin', function (req, res, next) {
+    var data = req.body;
+    var datajson = { "access_token": data.access_token };
+    var option =
+        {
+            url: 'http://localhost:81/Users/checksignin',
+            method: 'POST',
+            json: true,
+            headers:
+                {
+                    'Content-Type': 'application/json'
+                },
+            body: datajson
+        };
+    request(option, function (error, response, body) {
+        res.send(body);
+    });
+});
+
+router.post('/signin', function (req, res, next) {
+    var data = req.body;
+    var datajson = { "access_token": data.access_token };
+    var option =
+        {
+            url: 'http://localhost:81/Users/signin',
+            method: 'POST',
+            json: true,
+            headers:
+                {
+                    'Content-Type': 'application/json'
+                },
+            body: datajson
+        };
+    request(option, function (error, response, body) {
+        res.send(body);
+    });
+});
+
 router.post('/getpetscount', function (req, res, next) {
     var data = req.body;
     var datajson = { "access_token": data.access_token };

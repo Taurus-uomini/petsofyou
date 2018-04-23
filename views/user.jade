@@ -6,6 +6,8 @@ head
     meta(http-equiv="X-UA-Compatible" content="ie=edge")
     title 用户中心
     script(src="javascripts/require.js" data-main="javascripts/user")
+    script(src="javascripts/toolfun.js")
+    link(rel="stylesheet", href="stylesheets/toolfun.css")
     style.
         #user_petslist
         {
@@ -18,6 +20,11 @@ head
             display: inline-block;
         }
 body
+    div.modal_div#show_modal1
+        div.modal_item_div
+            p#givepcoin_p 恭喜你获得200金币
+            button#okclose_btn 确认
+    button.modal_button#signin_btn(data_div_id="show_modal1") 签到
     div(id="user_petslist")
 
     
