@@ -6,15 +6,25 @@ head
     meta(http-equiv="X-UA-Compatible" content="ie=edge")
     title pet
     script(src="javascripts/require.js" data-main="javascripts/main")
+    style.
+        #user_petslist
+        {
+            width: 1000px;
+            margin: 0 auto;
+        }
+        .petitem_div
+        {
+            width: 25%;
+            display: inline-block;
+        }
+        .item_info_div
+        {
+            width: 199px;
+            background-color: #00000040;
+            padding: 1px;
+            text-align: center;
+        }
 body
-    div(style="width:1000px;margin:0 auto;")
-        canvas(id="pet" width="1000" height="500")
-    div.textinput
-        input(type="text" id="talkwords")
-        button(id="talksend") 发送
-        p#respone
-        audio#responeaudio
-    div.givepet
-        button(id="givepet_btn") 领取宠物
+    div(id="user_petslist")
 
     

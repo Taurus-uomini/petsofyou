@@ -87,6 +87,71 @@ require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,
                         {
                             features = data.pet.features;
                             init();
+                            var modal_div = document.getElementsByClassName('modal_div');
+                            var sell_btn = document.getElementById('sell_btn');
+                            var close_btn = document.getElementById('close_btn');
+                            var ok_btn = document.getElementById('ok_btn');
+                            var inputpasswd_p = document.getElementById('inputpasswd_p');
+                            var pcoinnum_input = document.getElementById('pcoinnum');
+                            var password_input = document.getElementById('password');
+                            if(parseInt(data.pet.is_onsell) == 1)
+                            {
+                                sell_btn.innerHTML = '取消出售';
+                                inputpasswd_p.innerHTML = '确认取消出售';
+                                pcoinnum_input.style.display = 'none';
+                                sell_btn.setAttribute('data_is_onsell',0);
+                            }                           
+                            close_btn.onclick = function()
+                            {
+                                modal_div.do('hide',sell_btn.getAttribute('data_div_id'));
+                            }
+                            ok_btn.onclick = function()
+                            {
+                                var postdata = {"access_token": access_token, "paddress": paddress, "petaddr": data.pet.addr, "password":password_input.value, "pcoinnum":pcoinnum_input.value, "is_onsell":parseInt(sell_btn.getAttribute('data_is_onsell'))};
+                                httprequest.dorequest
+                                (
+                                    '/user/onsellchange',
+                                    JSON.stringify(postdata),
+                                    'post',
+                                    function (status, data) 
+                                    {
+                                        if (status == -1) 
+                                        {
+                                            alert('网络超时，请重试！');
+                                        }
+                                        else if (status == 0) 
+                                        {
+                                            console.log(data);
+                                            if(data.code != 0)
+                                            {
+                                                alert(data.message);
+                                            }
+                                            else
+                                            {
+                                                if(parseInt(data.result.is_onsell) == 1)
+                                                {
+                                                    sell_btn.innerHTML = '取消出售';
+                                                    inputpasswd_p.innerHTML = '确认取消出售';
+                                                    pcoinnum_input.style.display = 'none';
+                                                    sell_btn.setAttribute('data_is_onsell',0);
+                                                }
+                                                else
+                                                {
+                                                    sell_btn.innerHTML = '出售';
+                                                    inputpasswd_p.innerHTML = '确认出售';
+                                                    pcoinnum_input.style.display = 'inline';
+                                                    sell_btn.setAttribute('data_is_onsell',1);
+                                                } 
+                                                password_input.value = '';
+                                                modal_div.do('hide',sell_btn.getAttribute('data_div_id'));
+                                            }
+                                        }
+                                    },
+                                    2000,
+                                    'application/json',
+                                    'json'
+                                );
+                            }
                         }
                     },
                     2000,

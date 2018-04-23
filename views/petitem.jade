@@ -6,6 +6,8 @@ head
     meta(http-equiv="X-UA-Compatible" content="ie=edge")
     title pet
     script(src="/javascripts/require.js" data-main="/javascripts/petitem")
+    script(src="/javascripts/toolfun.js")
+    link(rel="stylesheet", href="/stylesheets/toolfun.css")
 body
     div(style="width:1000px;margin:0 auto;")
         input(type="hidden" id="petid" value="#{id}")
@@ -15,5 +17,15 @@ body
         button(id="talksend") 发送
         p#respone
         audio#responeaudio
+    div#sell_div
+        div.modal_div#show_modal1
+            div.modal_item_div
+                p#inputpasswd_p 确认出售
+                input(type="number", id="pcoinnum" placeholder="所需pcoin")
+                input(type="password", id="password", placeholder="密码")
+                br
+                button#ok_btn 确认
+                button#close_btn 取消
+        button.modal_button#sell_btn(data_div_id="show_modal1" data_is_onsell=1) 出售
 
     

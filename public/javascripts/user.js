@@ -111,7 +111,7 @@ require(['pet', 'pobject', 'petfeatures', 'httprequest', 'checklogin'], function
 
                 }
                 else {
-                    if(data.result.petscount == 0)
+                    if(data.result.petscount == 0 && data.result.hasgetpet == 0)
                     {
                         let nopets_p = document.createElement('p');
                         nopets_p.appendChild(document.createTextNode("你还没有宠物:-)"));

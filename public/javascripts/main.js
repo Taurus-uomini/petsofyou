@@ -15,93 +15,112 @@ require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,
     {
         location='/login';
     }
-    let c=document.getElementById('pet');
+    let access_token = localStorage.getItem('access_token');
+    let paddress = localStorage.getItem('paddress');
+    let user_petslist = document.getElementById('user_petslist');
+    let datajson={"access_token":access_token};
+    let c=document.createElement('canvas');
+    c.width = 200;
+    c.height = 200;
     let ctx=c.getContext('2d');
-    let talkwords=document.getElementById('talkwords');
-    let talksend=document.getElementById('talksend');
-    let responeaudio=document.getElementById('responeaudio');
-    let givepet_btn=document.getElementById('givepet_btn');
-    let features='11110354';
-    let stime;
-    givepet_btn.onclick = function()
-    {
-        let access_token = localStorage.getItem('access_token');
-        let paddress = localStorage.getItem('paddress');
-        let datajson={"access_token":access_token,"paddress":paddress};
-        httprequest.dorequest
-        (
-            '/givepet',
-            JSON.stringify(datajson),
-            'post',
-            function(status,data)
+    httprequest.dorequest
+    (
+        '/pets/getonsellpets',
+        JSON.stringify(datajson),
+        'post',
+        function (status, data) 
+        {
+            if (status == -1) 
             {
-                if(status==-1)
-                {
-                    alert('网络超时，请重试！');
-                }
-                else if(status==0)
-                {
-                    console.log(data);
-                    if(data.code != 0)
-                    {
-                        alert(data.message);
-                        if(data.code == 1000)
-                        {
-                            location='/login';
-                        }
-                        
-                    }
-                    else
-                    {
-                        if(data.result)
-                        {
-                            alert('you have already get a pet');
-                        }
-                        else
-                        {
-                            features = data.pet.features;
-                            clearTimeout(stime);
-                            pet.cleanpobjects();
-                            init();
-                        }
-                    }
-                }
-            },
-            2000,
-            'application/json',
-            'json'
-        );
-    }
-    talksend.onclick = function()
-    {
-        let datajson={"talkwords":talkwords.value,"character":petfeatures.getcharacter(),"voice":petfeatures.getvoice(),"speed":petfeatures.getspeed(),"tone":petfeatures.gettone()};
-        httprequest.dorequest
-        (
-            // 'http://openapi.tuling123.com/openapi/api/v2',
-            '/gettalk',
-            JSON.stringify(datajson),
-            'post',
-            function(status,data)
+                alert('网络超时，请重试！');
+            }
+            else if (status == 0) 
             {
-                if(status==-1)
+                console.log(data);
+                let pets = data.result.pets;
+                if(pets.length == 0)
                 {
-                    alert('网络超时，请重试！');
+                    let nopets_p = document.createElement('p');
+                    nopets_p.appendChild(document.createTextNode("没有正在出售的宠物:-)"));
+                    user_petslist.appendChild(nopets_p);
                 }
-                else if(status==0)
+                pets.forEach(function (pet) 
                 {
-                    console.log(data);
-                    document.getElementById('respone').innerHTML=data.text.results[0].values.text;
-                    responeaudio.src=data.audiourl;
-                    responeaudio.play();
-                }
-            },
-            2000,
-            'application/json',
-            'json'
-        );
+                    let postjsondata = {"petaddr": pet.addr };
+                    httprequest.dorequest
+                    (
+                        '/pets/getpetinfo',
+                        JSON.stringify(postjsondata),
+                        'post',
+                        function (status, data) 
+                        {
+                            if (status == -1) 
+                            {
+                                alert('网络超时，请重试！');
+                            }
+                            else if (status == 0) 
+                            {
+                                let petitem_div = document.createElement('div');
+                                petitem_div.className = 'petitem_div';
+                                let petimg = new Image();
+                                drawpet(data.pet.features, petimg);
+                                petitem_div.appendChild(petimg);
+                                let item_info_div = document.createElement('div');
+                                item_info_div.className = 'item_info_div';
+                                let prize_p = document.createElement('p');
+                                prize_p.appendChild(document.createTextNode("价格："+pet.pcoinnum+"pcoin"));
+                                item_info_div.appendChild(prize_p);
+                                let buy_btn = document.createElement('button');
+                                buy_btn.appendChild(document.createTextNode("购买"));
+                                buy_btn.onclick = function()
+                                {
+                                    var postdata = {"access_token":access_token, "paddress":paddress, "petaddr":pet.addr, "petid":pet.id, "pcoinnum":pet.pcoinnum}
+                                    httprequest.dorequest
+                                    (
+                                        '/pets/buypet',
+                                        JSON.stringify(postdata),
+                                        'post',
+                                        function (status, data) 
+                                        {
+                                            if (status == -1) 
+                                            {
+                                                alert('网络超时，请重试！');
+                                            }
+                                            else if (status == 0) 
+                                            {
+                                                console.log(data);
+                                                location = '/user';
+                                            }
+                                        },
+                                        2000,
+                                        'application/json',
+                                        'json'
+                                    );
+                                }
+                                item_info_div.appendChild(buy_btn);
+                                petitem_div.appendChild(item_info_div);
+                                user_petslist.appendChild(petitem_div);
+                                // petitem_div.onclick = function () {
+                                //     location = '/user/petitem/' + pet.id;
+                                // }
+                            }
+                        },
+                        2000,
+                        'application/json',
+                        'json'
+                    );
+                });
+            }
+        },
+        2000,
+        'application/json',
+        'json'
+    );
+    function drawpet(features,petimg)
+    {
+        init(features,petimg);
     }
-    init();
-    function init()
+    function init(features,petimg)
     {
         petfeatures.init(features);
         let arr=[{'x':70,'y':120,'scalex':1,'scaley':1,'priority':1,'img':'images/pet-body'+petfeatures.getbodytype()+'.png'},{'x':70,'y':0,'scalex':1,'scaley':1,'priority':2,'img':'images/pet-head'+petfeatures.getheadtype()+'.png'},{'x':80,'y':20,'scalex':1,'scaley':1,'priority':3,'img':'images/pet-mouth'+petfeatures.getmouthtype()+'.png'},{'x':40,'y':0,'scalex':1,'scaley':1,'priority':4,'img':'images/pet-eye'+petfeatures.geteyetype()+'.png'},{'x':120,'y':0,'scalex':1,'scaley':1,'priority':5,'img':'images/pet-eye'+petfeatures.geteyetype()+'.png'}];
@@ -118,23 +137,15 @@ require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,
             npobject.setimg(img);
             pet.addpobjects(npobject);
         });
-        run();
+        window.setTimeout(function(){draw(petimg);},20);
     }
-    function run()
-    {
-        pet.speak(!!responeaudio.duration && responeaudio.currentTime!=responeaudio.duration);
-        pet.blink();
-        pet.jump();
-        draw();
-        stime=window.setTimeout(function(){run();},10);
-    }
-    function draw()
+    function draw(petimg)
     {
         ctx.fillStyle="#f0f8ff";
         ctx.fillRect(0,0,c.width,c.height);
         ctx.fillStyle="#000000";
         ctx.save();
-        ctx.translate(450,pet.getgroundy()+210);
+        ctx.translate(100,185);
         ctx.scale(1,0.3);
         ctx.beginPath();
         ctx.arc(0,0,50,0,2*Math.PI);
@@ -143,8 +154,8 @@ require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,
         ctx.closePath();
         ctx.restore();
         ctx.save();
-        ctx.translate(pet.getpx(),pet.getpy()); 
-        ctx.scale(0.4,0.4);
+        ctx.translate(50,30); 
+        ctx.scale(0.3,0.3);
         pet.getpobjects().forEach(function(v)
         {
             ctx.save();
@@ -154,5 +165,6 @@ require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,
             ctx.restore();
         });
         ctx.restore();
+        petimg.src = c.toDataURL('image/jpeg');
     }
 });
