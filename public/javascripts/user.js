@@ -75,6 +75,10 @@ require(['pet', 'pobject', 'petfeatures', 'httprequest', 'checklogin'], function
                                         {
                                             modal_div.do('hide',div_id);
                                         }
+                                        var user_pcoin_p =document.getElementById('user_pcoin_p');
+                                        var pcoin = parseInt(user_pcoin_p.innerHTML.split("：")[1]) + parseInt(data.result.gave_pcoin);
+                                        user_pcoin_p.firstChild.remove();
+                                        user_pcoin_p.appendChild(document.createTextNode("pcoin："+pcoin));
                                     }
                                     signin_btn.innerHTML = '你今天已签到';
                                     signin_btn.onclick = '';
@@ -245,12 +249,36 @@ require(['pet', 'pobject', 'petfeatures', 'httprequest', 'checklogin'], function
         'application/json',
         'json'
     );
+    httprequest.dorequest
+    (
+        '/user/getpcoininfo',
+        JSON.stringify(datajson),
+        'post',
+        function (status, data) 
+        {
+            if (status == -1) 
+            {
+                alert('网络超时，请重试！');
+            }
+            else if (status == 0) 
+            {
+                var user_name_p = document.getElementById('user_name_p');
+                var user_pcoin_p = document.getElementById('user_pcoin_p');
+                user_name_p.appendChild(document.createTextNode("用户名："+localStorage.getItem('nickname')));
+                user_pcoin_p.appendChild(document.createTextNode("pcoin："+data.result.pcoininfo.pcoin));
+            }
+        },
+        2000,
+        'application/json',
+        'json'
+    );
     function drawpet(features,petimg)
     {
         init(features,petimg);
     }
     function init(features,petimg)
     {
+        pet.cleanpobjects();
         petfeatures.init(features);
         let arr=[{'x':70,'y':120,'scalex':1,'scaley':1,'priority':1,'img':'images/pet-body'+petfeatures.getbodytype()+'.png'},{'x':70,'y':0,'scalex':1,'scaley':1,'priority':2,'img':'images/pet-head'+petfeatures.getheadtype()+'.png'},{'x':80,'y':20,'scalex':1,'scaley':1,'priority':3,'img':'images/pet-mouth'+petfeatures.getmouthtype()+'.png'},{'x':40,'y':0,'scalex':1,'scaley':1,'priority':4,'img':'images/pet-eye'+petfeatures.geteyetype()+'.png'},{'x':120,'y':0,'scalex':1,'scaley':1,'priority':5,'img':'images/pet-eye'+petfeatures.geteyetype()+'.png'}];
         arr.forEach(function(v)

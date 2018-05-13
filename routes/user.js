@@ -9,7 +9,7 @@ if (typeof web3 !== 'undefined') {
 else {
     web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
 }
-var address = '0x527e4ad029db0fbf13be40fe85526781500fee1d';
+var address = '0x3a47117515075329f02361810f4669ea0406a5f8';
 var account_one = '0xa37A1CB49128B50AB0F8fc0A5f54715D41E29eEd';
 var abi = [
     {
@@ -368,6 +368,24 @@ router.post('/getpetinfo', function (req, res, next) {
             res.send({ "code": 0, "message": "success", "pet": result });
         }
     });
+});
+router.post('/getpcoininfo', function (req, res, next) {
+  var data = req.body;
+  var datajson = { "access_token": data.access_token };
+  var option =
+    {
+      url: 'http://localhost:81/Users/pcoininfo',
+      method: 'POST',
+      json: true,
+      headers:
+        {
+          'Content-Type': 'application/json'
+        },
+      body: datajson
+    };
+  request(option, function (error, response, body) {
+    res.send(body);
+  });
 });
 router.post('/onsellchange', function (req, res, next) {
     var data = req.body;

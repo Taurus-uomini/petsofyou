@@ -37,79 +37,90 @@ require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,
             else if (status == 0) 
             {
                 console.log(data);
-                let pets = data.result.pets;
-                if(pets.length == 0)
+                if (data.code != 0) 
                 {
-                    let nopets_p = document.createElement('p');
-                    nopets_p.appendChild(document.createTextNode("没有正在出售的宠物:-)"));
-                    user_petslist.appendChild(nopets_p);
+                    alert(data.message);
+                    if (data.code == 1000) 
+                    {
+                        location = '/login';
+                    }
+
                 }
-                pets.forEach(function (pet) 
-                {
-                    let postjsondata = {"petaddr": pet.addr };
-                    httprequest.dorequest
-                    (
-                        '/pets/getpetinfo',
-                        JSON.stringify(postjsondata),
-                        'post',
-                        function (status, data) 
-                        {
-                            if (status == -1) 
+                else {
+                    let pets = data.result.pets;
+                    if (pets.length == 0) 
+                    {
+                        let nopets_p = document.createElement('p');
+                        nopets_p.appendChild(document.createTextNode("没有正在出售的宠物:-)"));
+                        user_petslist.appendChild(nopets_p);
+                    }
+                    pets.forEach(function (pet) 
+                    {
+                        let postjsondata = { "petaddr": pet.addr };
+                        httprequest.dorequest
+                            (
+                            '/pets/getpetinfo',
+                            JSON.stringify(postjsondata),
+                            'post',
+                            function (status, data) 
                             {
-                                alert('网络超时，请重试！');
-                            }
-                            else if (status == 0) 
-                            {
-                                let petitem_div = document.createElement('div');
-                                petitem_div.className = 'petitem_div';
-                                let petimg = new Image();
-                                drawpet(data.pet.features, petimg);
-                                petitem_div.appendChild(petimg);
-                                let item_info_div = document.createElement('div');
-                                item_info_div.className = 'item_info_div';
-                                let prize_p = document.createElement('p');
-                                prize_p.appendChild(document.createTextNode("价格："+pet.pcoinnum+"pcoin"));
-                                item_info_div.appendChild(prize_p);
-                                let buy_btn = document.createElement('button');
-                                buy_btn.appendChild(document.createTextNode("购买"));
-                                buy_btn.onclick = function()
+                                if (status == -1) 
                                 {
-                                    var postdata = {"access_token":access_token, "paddress":paddress, "petaddr":pet.addr, "petid":pet.id, "pcoinnum":pet.pcoinnum}
-                                    httprequest.dorequest
-                                    (
-                                        '/pets/buypet',
-                                        JSON.stringify(postdata),
-                                        'post',
-                                        function (status, data) 
-                                        {
-                                            if (status == -1) 
-                                            {
-                                                alert('网络超时，请重试！');
-                                            }
-                                            else if (status == 0) 
-                                            {
-                                                console.log(data);
-                                                location = '/user';
-                                            }
-                                        },
-                                        2000,
-                                        'application/json',
-                                        'json'
-                                    );
+                                    alert('网络超时，请重试！');
                                 }
-                                item_info_div.appendChild(buy_btn);
-                                petitem_div.appendChild(item_info_div);
-                                user_petslist.appendChild(petitem_div);
-                                // petitem_div.onclick = function () {
-                                //     location = '/user/petitem/' + pet.id;
-                                // }
-                            }
-                        },
-                        2000,
-                        'application/json',
-                        'json'
-                    );
-                });
+                                else if (status == 0) 
+                                {
+                                    let petitem_div = document.createElement('div');
+                                    petitem_div.className = 'petitem_div';
+                                    let petimg = new Image();
+                                    drawpet(data.pet.features, petimg);
+                                    petitem_div.appendChild(petimg);
+                                    let item_info_div = document.createElement('div');
+                                    item_info_div.className = 'item_info_div';
+                                    let prize_p = document.createElement('p');
+                                    prize_p.appendChild(document.createTextNode("价格：" + pet.pcoinnum + "pcoin"));
+                                    item_info_div.appendChild(prize_p);
+                                    let buy_btn = document.createElement('button');
+                                    buy_btn.appendChild(document.createTextNode("购买"));
+                                    buy_btn.onclick = function () 
+                                    {
+                                        var postdata = { "access_token": access_token, "paddress": paddress, "petaddr": pet.addr, "petid": pet.id, "pcoinnum": pet.pcoinnum }
+                                        httprequest.dorequest
+                                            (
+                                            '/pets/buypet',
+                                            JSON.stringify(postdata),
+                                            'post',
+                                            function (status, data) 
+                                            {
+                                                if (status == -1) 
+                                                {
+                                                    alert('网络超时，请重试！');
+                                                }
+                                                else if (status == 0) 
+                                                {
+                                                    console.log(data);
+                                                    location = '/user';
+                                                }
+                                            },
+                                            2000,
+                                            'application/json',
+                                            'json'
+                                            );
+                                    }
+                                    item_info_div.appendChild(buy_btn);
+                                    petitem_div.appendChild(item_info_div);
+                                    user_petslist.appendChild(petitem_div);
+                                    // petitem_div.onclick = function () {
+                                    //     location = '/user/petitem/' + pet.id;
+                                    // }
+                                }
+                            },
+                            2000,
+                            'application/json',
+                            'json'
+                            );
+                    });
+                } 
             }
         },
         2000,
