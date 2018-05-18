@@ -8,24 +8,50 @@ head
     script(src="/javascripts/require.js" data-main="/javascripts/petitem")
     script(src="/javascripts/toolfun.js")
     link(rel="stylesheet", href="/stylesheets/toolfun.css")
+    style.
+        .textinput input
+        {
+            width: 15%;
+            height: 15px;
+            display: inline;
+            margin: 10px;
+        }
+        .modal_item_div input
+        {
+            width:30%;
+            height: 15px;
+            display: inherit;
+            margin: 10px;
+            margin-left: 33%;
+        }
+        .textinput
+        {
+            width: 50%;
+            margin: 10px auto;
+        }
+        #sell_div
+        {
+            width: 50%;
+            margin: 10px auto;
+        }
 body
     div(style="width:1000px;margin:0 auto;")
         input(type="hidden" id="petid" value="#{id}")
         canvas(id="pet" width="1000" height="500")
     div.textinput
-        input(type="text" id="talkwords")
-        button(id="talksend") 发送
+        input(type="text" class="text_input" id="talkwords")
+        button.btn.btn-primary(id="talksend") 发送
         p#respone
         audio#responeaudio
     div#sell_div
         div.modal_div#show_modal1
             div.modal_item_div
                 p#inputpasswd_p 确认出售
-                input(type="number", id="pcoinnum" placeholder="所需pcoin")
-                input(type="password", id="password", placeholder="密码")
+                input(type="number" id="pcoinnum" class="text_input" placeholder="所需pcoin")
+                input(type="password" id="password"  class="text_input" placeholder="密码")
                 br
-                button#ok_btn 确认
-                button#close_btn 取消
-        button.modal_button#sell_btn(data_div_id="show_modal1" data_is_onsell=1) 出售
+                button.btn.btn-primary#ok_btn 确认
+                button.btn.btn-primary#close_btn 取消
+        button.btn.btn-primary.modal_button#sell_btn(data_div_id="show_modal1" data_is_onsell=1) 出售
 
     

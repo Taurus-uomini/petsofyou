@@ -186,6 +186,7 @@ require(['pet', 'pobject', 'petfeatures', 'httprequest', 'checklogin'], function
                     }
                     else
                     {
+                        user_petslist.style.textAlign = 'left';
                         datajson={"access_token":access_token};
                         httprequest.dorequest
                         (

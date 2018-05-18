@@ -9,10 +9,26 @@ head
     script(src="javascripts/toolfun.js")
     link(rel="stylesheet", href="stylesheets/toolfun.css")
     style.
+        .user_header
+        {
+            width: 94%;
+            margin: 10px auto;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid rgba(0,0,0,.2);
+            border-radius: 6px;
+            box-shadow: 0 3px 9px rgba(0,0,0,.5);
+        }
         #user_petslist
         {
-            width: 1000px;
-            margin: 0 auto;
+            width: 90%;
+            margin: 10px auto;
+            margin-top: 60px;
+            text-align: center;
+            padding: 50px;
+            border: 1px solid rgba(0,0,0,.2);
+            border-radius: 6px;
+            box-shadow: 0 3px 9px rgba(0,0,0,.5);
         }
         .petitem_div
         {
@@ -23,11 +39,11 @@ body
     div.user_header
         p#user_name_p 
         p#user_pcoin_p
+        button.btn.btn-primary.modal_button#signin_btn(data_div_id="show_modal1") 签到
     div.modal_div#show_modal1
         div.modal_item_div
             p#givepcoin_p 恭喜你获得200金币
-            button#okclose_btn 确认
-    button.modal_button#signin_btn(data_div_id="show_modal1") 签到
+            button.btn.btn-primary#okclose_btn 确认
     div(id="user_petslist")
 
     

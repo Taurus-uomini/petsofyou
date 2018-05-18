@@ -6,23 +6,40 @@ head
     meta(http-equiv="X-UA-Compatible" content="ie=edge")
     title 注册
     script(src="javascripts/require.js" data-main="javascripts/register")
+    link(rel="stylesheet", href="/stylesheets/toolfun.css")
     style.
         #register_div
         {
-            width: 1000px;
-            margin: 0 auto;
+            width: 50%;
+            margin: 100px auto;
+            text-align: center;
+            padding: 50px;
+            border: 1px solid rgba(0,0,0,.2);
+            border-radius: 6px;
+            box-shadow: 0 3px 9px rgba(0,0,0,.5);
         }
         #register_div input
         {
             display: inherit;
+            margin: 30px auto;
+            width: 50%;
+            height: 20px;
+        }
+        #to_login
+        {
+            display: inherit;
+            color: #416EAF;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 10px;
             margin-top: 10px;
-            margin-bottom: 10px;
         }
 body
     form(id="register_form")
         div(id="register_div")
-            input(type="text" placeholder="用户名" name="username")
-            input(type="password" placeholder="密码" name="password")    
-            input(type="password" placeholder="重复密码" name="rpassword")
-            input(type="text" placeholder="昵称" name="nickname")
-            button(type="button" id="register_btn") 注册
+            input(type="text" class="text_input" placeholder="用户名" name="username")
+            input(type="password" class="text_input" placeholder="密码" name="password")    
+            input(type="password" class="text_input" placeholder="重复密码" name="rpassword")
+            input(type="text" class="text_input" placeholder="昵称" name="nickname")
+            button(type="button" class="btn btn-primary" id="register_btn") 注册
+            a(id="to_login" href="/login") 已有账号？点击登陆
