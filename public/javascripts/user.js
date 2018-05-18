@@ -19,6 +19,7 @@ require(['pet', 'pobject', 'petfeatures', 'httprequest', 'checklogin'], function
     let user_petslist = document.getElementById('user_petslist');
     let datajson={"access_token":access_token};
     let c=document.createElement('canvas');
+    let drawcount = 0;
     c.width = 200;
     c.height = 200;
     let ctx=c.getContext('2d');
@@ -203,7 +204,7 @@ require(['pet', 'pobject', 'petfeatures', 'httprequest', 'checklogin'], function
                                 {
                                     console.log(data);
                                     let pets = data.result.pets;
-                                    pets.forEach(function(pet)
+                                    pets.forEach(function(pet,index)
                                     {
                                         let postjsondata = {"paddress":paddress,"petaddr":pet.addr};
                                         httprequest.dorequest
@@ -222,7 +223,7 @@ require(['pet', 'pobject', 'petfeatures', 'httprequest', 'checklogin'], function
                                                     let petitem_div = document.createElement('div');
                                                     petitem_div.className = 'petitem_div';
                                                     let petimg = new Image();
-                                                    drawpet(data.pet.features,petimg);
+                                                    drawpet(data.pet.features,petimg,index);
                                                     petitem_div.appendChild(petimg);
                                                     user_petslist.appendChild(petitem_div);
                                                     petitem_div.onclick = function()
@@ -273,11 +274,11 @@ require(['pet', 'pobject', 'petfeatures', 'httprequest', 'checklogin'], function
         'application/json',
         'json'
     );
-    function drawpet(features,petimg)
+    function drawpet(features,petimg,index)
     {
-        init(features,petimg);
+        window.setTimeout(function(){init(features,petimg,index);},500*index);
     }
-    function init(features,petimg)
+    function init(features,petimg = 0)
     {
         pet.cleanpobjects();
         petfeatures.init(features);
@@ -295,7 +296,7 @@ require(['pet', 'pobject', 'petfeatures', 'httprequest', 'checklogin'], function
             npobject.setimg(img);
             pet.addpobjects(npobject);
         });
-        window.setTimeout(function(){draw(petimg);},20);
+        window.setTimeout(function(){draw(petimg);},50);
     }
     function draw(petimg)
     {

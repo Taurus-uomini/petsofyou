@@ -301,7 +301,7 @@ router.post('/buypet', function (req, res, next) {
           body: datajson
       };
   request(option, function (error, response, body) {
-      if(body.result.pcoininfo.pcoin < data.pcoinnum)
+      if(parseInt(body.result.pcoininfo.pcoin) < parseInt(data.pcoinnum))
       {
         res.send({ "code": 1400, "message": "you don't have enough pcoin" });
       }

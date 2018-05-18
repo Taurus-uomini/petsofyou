@@ -54,7 +54,7 @@ require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,
                         nopets_p.appendChild(document.createTextNode("没有正在出售的宠物:-)"));
                         user_petslist.appendChild(nopets_p);
                     }
-                    pets.forEach(function (pet) 
+                    pets.forEach(function (pet,index) 
                     {
                         let postjsondata = { "petaddr": pet.addr };
                         httprequest.dorequest
@@ -73,7 +73,7 @@ require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,
                                     let petitem_div = document.createElement('div');
                                     petitem_div.className = 'petitem_div';
                                     let petimg = new Image();
-                                    drawpet(data.pet.features, petimg);
+                                    drawpet(data.pet.features, petimg, index);
                                     petitem_div.appendChild(petimg);
                                     let item_info_div = document.createElement('div');
                                     item_info_div.className = 'item_info_div';
@@ -99,7 +99,14 @@ require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,
                                                 else if (status == 0) 
                                                 {
                                                     console.log(data);
-                                                    location = '/user';
+                                                    if(data.code != 0)
+                                                    {
+                                                        alert(data.message);
+                                                    }
+                                                    else
+                                                    {
+                                                        location = '/user';
+                                                    }
                                                 }
                                             },
                                             2000,
@@ -127,12 +134,13 @@ require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,
         'application/json',
         'json'
     );
-    function drawpet(features,petimg)
+    function drawpet(features,petimg,index)
     {
-        init(features,petimg);
+        window.setTimeout(function(){init(features,petimg,index);},500*index);
     }
     function init(features,petimg)
     {
+        pet.cleanpobjects();
         petfeatures.init(features);
         let arr=[{'x':70,'y':120,'scalex':1,'scaley':1,'priority':1,'img':'images/pet-body'+petfeatures.getbodytype()+'.png'},{'x':70,'y':0,'scalex':1,'scaley':1,'priority':2,'img':'images/pet-head'+petfeatures.getheadtype()+'.png'},{'x':80,'y':20,'scalex':1,'scaley':1,'priority':3,'img':'images/pet-mouth'+petfeatures.getmouthtype()+'.png'},{'x':40,'y':0,'scalex':1,'scaley':1,'priority':4,'img':'images/pet-eye'+petfeatures.geteyetype()+'.png'},{'x':120,'y':0,'scalex':1,'scaley':1,'priority':5,'img':'images/pet-eye'+petfeatures.geteyetype()+'.png'}];
         arr.forEach(function(v)
@@ -148,7 +156,7 @@ require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,
             npobject.setimg(img);
             pet.addpobjects(npobject);
         });
-        window.setTimeout(function(){draw(petimg);},20);
+        window.setTimeout(function(){draw(petimg);},50);
     }
     function draw(petimg)
     {
