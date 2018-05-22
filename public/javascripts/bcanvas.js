@@ -34,7 +34,7 @@ define(function ()
         this.initStar = function () 
         {
             this.stars = Array();
-            for (i = 0; i < 20; ++i) 
+            for (i = 0; i < 200; ++i) 
             {
                 this.stars.push({ 'x': this.getRandom(1, this.canvas.width), 'y': this.getRandom(1, this.canvas.height), 'op': 0 });
             }
