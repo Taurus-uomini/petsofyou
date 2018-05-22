@@ -6,10 +6,11 @@ require.config(
         "pobject": "pobject",
         'petfeatures': "petfeatures",
         "httprequest": "httprequest",
-        "checklogin": "checklogin"
+        "checklogin": "checklogin",
+        "bcanvas":"bcanvas"
     }
 });
-require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,pobject,petfeatures,httprequest,checklogin)
+require(['pet','pobject','petfeatures','httprequest','checklogin','bcanvas'],function(pet,pobject,petfeatures,httprequest,checklogin,bcanvas)
 {
     if(!checklogin.checklogin())
     {
@@ -25,6 +26,10 @@ require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,
     let access_token = localStorage.getItem('access_token');
     let paddress = localStorage.getItem('paddress');
     let petid = document.getElementById('petid').value;
+    let bcanvasobj = bcanvas.getBcanvas();
+    document.body.appendChild(bcanvasobj.canvas);
+    bcanvasobj.init();
+    setInterval(function(){bcanvasobj.draw();},200);
     talksend.onclick = function()
     {
         let datajson={"talkwords":talkwords.value,"character":petfeatures.getcharacter(),"voice":petfeatures.getvoice(),"speed":petfeatures.getspeed(),"tone":petfeatures.gettone()};

@@ -2,11 +2,16 @@ require.config(
     {
         paths: 
         {
-            "httprequest": "httprequest"
+            "httprequest": "httprequest",
+            "bcanvas":"bcanvas"
         }
     });
-    require(['httprequest'],function(httprequest)
+    require(['httprequest','bcanvas'],function(httprequest,bcanvas)
     {
+        let bcanvasobj = bcanvas.getBcanvas();
+        document.body.appendChild(bcanvasobj.canvas);
+        bcanvasobj.init();
+        setInterval(function(){bcanvasobj.draw();},200);
         let login_btn = document.getElementById('login_btn');
         login_btn.onclick = function()
         {

@@ -6,10 +6,11 @@ require.config(
         "pobject": "pobject",
         'petfeatures': "petfeatures",
         "httprequest": "httprequest",
-        "checklogin": "checklogin"
+        "checklogin": "checklogin",
+        "bcanvas":"bcanvas"
     }
 });
-require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,pobject,petfeatures,httprequest,checklogin)
+require(['pet','pobject','petfeatures','httprequest','checklogin','bcanvas'],function(pet,pobject,petfeatures,httprequest,checklogin,bcanvas)
 {
     if(!checklogin.checklogin())
     {
@@ -23,6 +24,10 @@ require(['pet','pobject','petfeatures','httprequest','checklogin'],function(pet,
     c.width = 200;
     c.height = 200;
     let ctx=c.getContext('2d');
+    let bcanvasobj = bcanvas.getBcanvas();
+    document.body.appendChild(bcanvasobj.canvas);
+    bcanvasobj.init();
+    setInterval(function(){bcanvasobj.draw();},200);
     httprequest.dorequest
     (
         '/pets/getonsellpets',

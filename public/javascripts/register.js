@@ -2,12 +2,17 @@ require.config(
     {
         paths: 
         {
-            "httprequest": "httprequest"
+            "httprequest": "httprequest",
+            "bcanvas":"bcanvas"
         }
     });
-    require(['httprequest'],function(httprequest)
+    require(['httprequest','bcanvas'],function(httprequest,bcanvas)
     {
         let register_btn = document.getElementById('register_btn');
+        let bcanvasobj = bcanvas.getBcanvas();
+        document.body.appendChild(bcanvasobj.canvas);
+        bcanvasobj.init();
+        setInterval(function(){bcanvasobj.draw();},200);
         register_btn.onclick = function()
         {
             let register_form = document.getElementById('register_form');
